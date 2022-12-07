@@ -84,7 +84,6 @@ class BST(bt.BT):
             return []
 
         bfs_queue = self.get_bfs_star_queue()
-
         return bfs_queue
 
     def get_bfs_star_queue(self):
@@ -107,7 +106,6 @@ class BST(bt.BT):
 
             queue.append(node.lc()) if not node.lc().is_empty() else queue.append(temp)
             queue.append(node.rc()) if not node.rc().is_empty() else queue.append(temp)
-
         return bfs_queue
 
     def add(self, v):
@@ -142,6 +140,7 @@ class BST(bt.BT):
             return self.delete_node()
 
     def delete_node(self):
+        # If deletion node has 1 or 0 children
         if self.lc().is_empty():
             temp = self.rc()
             self.set_value(None)
@@ -151,6 +150,11 @@ class BST(bt.BT):
             self.set_value(None)
             return temp
         else:
+            '''
+            If deletion node has 2 children, check which subtree is the highest and
+            get min or max value of this subtree depending if it's right or left. 
+            Set this value as the new root. This creates a better tree balance.
+            '''
             if self.lc().height() < self.rc().height():
                 node = self.rc().min_value_node()
                 self.set_value(node.value())
@@ -172,7 +176,7 @@ class BST(bt.BT):
 
     def max_value_node(self):
         '''
-        Returns node with maximium value
+        Returns node with maximum value
         '''
         if not self.rc().is_empty():
             return self.rc().max_value_node()

@@ -18,17 +18,23 @@ class AVL(bst.BST):
 
     def add(self, v):
         '''
-        Example which shows how to override and call parent methods.  You
-        may remove this function and overide something else if you'd like.
+        Calling super class add function and balancing the tree afterwards.
         '''
         super().add(v)
         return self.balance()
 
     def delete(self, v):
+        '''
+        Calling super class delete function and balancing the tree afterwards.
+        '''
         super().delete(v)
         return self.balance()
 
     def bf(self):
+        '''
+        Returns the balance of the tree. Negative number if right subtree is higher
+        and vice versa.
+        '''
         return self.lc().height() - self.rc().height()
 
     def balance(self):
@@ -41,13 +47,11 @@ class AVL(bst.BST):
                 return self.dlr()
             else:  # Outer heavy
                 return self.slr()
-
         elif self.bf() == 2:  # Left heavy
             if self.lc().bf() <= -1:
                 return self.drr()
             else:
                 return self.srr()
-
         return self
 
     def slr(self):
@@ -57,7 +61,6 @@ class AVL(bst.BST):
         node = self.rc()
         self.set_rc(node.lc())
         node.set_lc(self)
-
         return node
 
     def srr(self):
@@ -67,7 +70,6 @@ class AVL(bst.BST):
         node = self.lc()
         self.set_lc(node.rc())
         node.set_rc(self)
-
         return node
 
     def dlr(self):
@@ -75,7 +77,6 @@ class AVL(bst.BST):
         Performs a double-left rotate around the node rooted at `self`.
         '''
         self.set_rc(self.rc().srr())
-
         return self.slr()
 
     def drr(self):
@@ -83,7 +84,6 @@ class AVL(bst.BST):
         Performs a double-right rotate around the node rooted at `self`.
         '''
         self.set_lc(self.lc().slr())
-
         return self.srr()
 
 if __name__ == "__main__":
