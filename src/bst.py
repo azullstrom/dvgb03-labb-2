@@ -139,12 +139,9 @@ class BST(bt.BT):
         elif v > self.value():
             return self.cons(self.lc(), self.rc().delete(v))
         else:
-            self = self.delete_node()
-
-        return self
+            return self.delete_node()
 
     def delete_node(self):
-        # When deletion node have 1 or 0 children, return this child for cons and delete
         if self.lc().is_empty():
             temp = self.rc()
             self.set_value(None)
@@ -153,40 +150,16 @@ class BST(bt.BT):
             temp = self.lc()
             self.set_value(None)
             return temp
-        # When deletion node has 2 children, get the largest node from left subtree
-        # or the smallest node from right subtree to avoid unbalance in the tree.
         else:
             if self.lc().height() < self.rc().height():
                 node = self.rc().min_value_node()
-                # New root for this subtree
                 self.set_value(node.value())
-
-                # If the node have a child to the right bring it up in the tree
-                if not node.rc().is_empty():
-                    node.set_value(node.rc().value())
-                    node.cons(node.rc().lc(), node.rc().rc())
-                    return self.cons(self.lc(), self.rc())
-                # If no child, assign None and rebuild tree
-                else:
-                    node.set_value(None)
-                    node.set_rc(None)
-                    node.set_lc(None)
-                    return self.cons(self.lc(), self.rc())
+                self.set_rc(self.rc().delete(node.value()))
             else:
                 node = self.lc().max_value_node()
                 self.set_value(node.value())
-
-                # If the node have a child to the right bring it up in the tree
-                if not node.lc().is_empty():
-                    node.set_value(node.lc().value())
-                    node.cons(node.lc().lc(), node.lc().rc())
-                    return self.cons(self.lc(), self.rc())
-                # If no child, assign None and rebuild tree
-                else:
-                    node.set_value(None)
-                    node.set_rc(None)
-                    node.set_lc(None)
-                    return self.cons(self.lc(), self.rc())
+                self.set_lc(self.lc().delete(node.value()))
+            return self
 
     def min_value_node(self):
         '''
